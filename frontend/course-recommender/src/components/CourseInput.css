@@ -1,0 +1,99 @@
+/* src/components/CourseInput.css */
+
+.input-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+  }
+  
+  .course-input {
+    width: 100%; /* 输入框宽度 */
+    height: 150px; /* 输入框高度 */
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px; /* 按钮与输入框之间的间隔 */
+    border-radius: 8px; /* 圆角 */
+    border: 1px solid #ccc; /* 边框 */
+    box-sizing: border-box; /* 包含 padding 和 border */
+    resize: none; /* 禁用调整大小 */
+    outline: none; /* 去掉默认外边框 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+    transition: border-color 0.3s; /* 添加平滑过渡 */
+
+    /* background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00,#ffff00, #ff0000, #fb0094, 
+    #0000ff, #00ff00,#ffff00, #ff0000);
+    background-size: 400%;
+    filter: blur(100px); */
+  }
+  
+  .course-input:focus {
+    border-color: #3fe9ff; /* 聚焦时改变边框颜色 */
+  }
+
+  
+  /* 其他 CSS 样式保持不变 */
+  .button {
+    cursor: pointer;
+    font-size: 1.4rem;
+    border-radius: 16px;
+    border: none;
+    padding: 2px;
+    background: radial-gradient(circle 80px at 80% -10%, #ffffff, #181b1b);
+    position: relative;
+    float: right; /* 右对齐 */
+  }
+  
+  /* 继续保持其他 button 的样式 */
+  .button::after {
+    content: "";
+    position: absolute;
+    width: 65%;
+    height: 60%;
+    border-radius: 120px;
+    top: 0;
+    right: 0;
+    box-shadow: 0 0 20px #ffffff38;
+    z-index: -1;
+  }
+  
+  .blob1 {
+    position: absolute;
+    width: 70px;
+    height: 100%;
+    border-radius: 16px;
+    bottom: 0;
+    left: 0;
+    background: radial-gradient(
+      circle 60px at 0% 100%,
+      #3fe9ff,
+      #0000ff80,
+      transparent
+    );
+    box-shadow: -10px 10px 30px #0051ff2d;
+  }
+  
+  .inner {
+    padding: 14px 25px;
+    border-radius: 14px;
+    color: #fff;
+    z-index: 3;
+    position: relative;
+    background: radial-gradient(circle 80px at 80% -50%, #777777, #0f1111);
+  }
+  
+  .inner::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    border-radius: 14px;
+    background: radial-gradient(
+      circle 60px at 0% 100%,
+      #00e1ff1a,
+      #0000ff11,
+      transparent
+    );
+    position: absolute;
+  }
+  

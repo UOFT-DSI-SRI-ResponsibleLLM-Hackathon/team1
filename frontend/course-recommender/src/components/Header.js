@@ -1,22 +1,3 @@
-// src/components/Header.js
-// import React from 'react';
-
-// function Header() {
-//   return (
-//     <header style={headerStyle}>
-//       <h1>Course Recommender</h1>
-//       <p>Get personalized course recommendations based on your interests!</p>
-//     </header>
-//   );
-// }
-
-// const headerStyle = {
-//   backgroundColor: '#282c34',
-//   color: 'white',
-//   padding: '10px',
-//   textAlign: 'center',
-// };
-
 // components/Header.js
 import React from 'react';
 // import './Header.css';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './CourseInput.css';
+import './ChatBox.css';
 
-function CourseInput({ onInputSubmit }) {
+function ChatBox() {
   const [input, setInput] = useState('');
   const [chatHistory, setChatHistory] = useState([
     { text: "Hey, what can I help you today!", isBot: true },
@@ -9,7 +9,6 @@ function CourseInput({ onInputSubmit }) {
     { text: "Server response", isBot: true },
     { text: "User input 2", isBot: false },
     { text: "User lots of input User lots of input User lots of input User lots of input User lots of input User lots of input User lots of input User lots of input User lots of input User lots of input User lots of input User lots of input User lots of inputUser lots of input User lots of input User lots of input User lots of inputUser lots of inputUser lots of inputUser lots of input", isBot: false },
-    
   ]);
 
   const handleInputChange = (e) => {
@@ -19,7 +18,6 @@ function CourseInput({ onInputSubmit }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (input.trim()) {
-      onInputSubmit(input);
       addUserMessage(input);
       setInput('');
       await getBotResponse(input);
@@ -31,20 +29,20 @@ function CourseInput({ onInputSubmit }) {
   };
 
   const getBotResponse = async (userMessage) => {
-    // // Mock response instead of fetching from server
-    // const fakeResponse = "This is a mock response to your input: " + userMessage;
-    // // Simulate delay to mimic API response time
-    // setTimeout(() => {
-    //   setChatHistory(prev => [...prev, { text: fakeResponse, isBot: true }]);
-    // }, 500);
+    // Mock response instead of fetching from server
+    const fakeResponse = "This is a mock response to your input: " + userMessage;
+    // Simulate delay to mimic API response time
+    setTimeout(() => {
+      setChatHistory(prev => [...prev, { text: fakeResponse, isBot: true }]);
+    }, 500);
 
-    try {
-      const response = await fetch(`/get?msg=${encodeURIComponent(userMessage)}`);
-      const data = await response.text();
-      setChatHistory(prev => [...prev, { text: data, isBot: true }]);
-    } catch (error) {
-      console.error("Error fetching bot response:", error);
-    }
+    // try {
+    //   const response = await fetch(`/get?msg=${encodeURIComponent(userMessage)}`);
+    //   const data = await response.text();
+    //   setChatHistory(prev => [...prev, { text: data, isBot: true }]);
+    // } catch (error) {
+    //   console.error("Error fetching bot response:", error);
+    // }
   };
 
   const handleKeyPress = (e) => {
@@ -90,5 +88,5 @@ function CourseInput({ onInputSubmit }) {
   );
 }
 
-export default CourseInput;
+export default ChatBox;
 

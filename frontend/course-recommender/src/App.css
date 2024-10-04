@@ -417,10 +417,12 @@
   }
   .badge-header{
     height:115px;
-    background-image:url("./images/banner.png"), url("./images/banner.png");
-    background-position:left top, center center;
+    background-image:url("./images/Developer_Background1.jpg");
     background-attachment:scroll, fixed;
     overflow:hidden;
+    background-position: top center; /* Positions the image at the top center */
+    background-repeat: no-repeat; /* Ensures the image is not repeated */
+    background-size: cover; /* Covers the entire banner area, cutting off the excess */
   }
   .badge-name{
     font-size:1.4em;

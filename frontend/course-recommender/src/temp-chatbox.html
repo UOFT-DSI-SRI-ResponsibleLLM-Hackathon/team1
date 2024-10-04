@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RQA Bot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      /* Set height of body and the document to 100% */
+      body,
+      html {
+        min-height: 100%;
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        line-height: 1.4;
+      }
+
+      body {
+        padding-inline: 1rem;
+      }
+
+      #userInput {
+        padding: 0;
+        margin-top: 0.5rem;
+        max-width: 32ch;
+      }
+
+      #textInput {
+        width: 100%;
+        border: none;
+        border-bottom: 3px solid black;
+        border-radius: 0.25rem 0.25rem 0 0;
+        font-size: 1.1rem;
+      }
+
+      #inputArea {
+        margin-top: 3rem;
+      }
+
+      #inputArea > * {
+        margin-inline: auto;
+        display: block;
+      }
+
+      #resetButton {
+        margin-top: 0.5rem;
+        border-color: red;
+      }
+
+      input {
+        padding: 0.25rem;
+      }
+
+      button {
+        border-radius: 0.25rem;
+        border-style: solid;
+        box-shadow: none;
+        font-size: 0.9rem;
+      }
+
+      .text {
+        display: flex;
+        width: 100%;
+        font-size: 1rem;
+        padding-bottom: 0.5rem;
+      }
+
+      .botText {
+        background-color: steelblue;
+        color: white;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        max-width: 85%;
+        min-width: 0;
+      }
+
+      .userText {
+        background-color: lightgray;
+        color: black;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        max-width: 85%;
+        min-width: 0;
+        margin-left: auto;
+      }
+
+      p {
+        display: inline-block;
+        margin: 0;
+      }
+
+      hr {
+        margin-block: 1.5rem;
+      }
+
+      .boxed {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 65ch;
+        margin-block: 24px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <h1 style="text-align: center;"><b>RQA Chat</b></h1>
+      <h4 style="text-align: center;">
+        <b>A chatbot to help you analyze stressors in your life</b>
+      </h4>
+      <p style="display: block; text-align: center;">
+        Note: This system sends all user inputs to OpenAI's GPT API. Inputs
+        should not be considered secure or confidential.
+      </p>
+
+      <hr />
+      <div class="boxed">
+        <div>
+          <div id="chatbox">
+            <div class="text">
+              <p class="botText">
+                <span
+                  >Think of a particular situation where you felt stressed or
+                  had a negative emotion, which you can try to reflect on as you
+                  go through this activity. It could be a current situation, one
+                  in the past, or one you anticipate in the future.</span
+                >
+              </p>
+            </div>
+          </div>
+          <div id="inputArea">
+            <button id="proceedButton" style="display: none">
+              Skip question
+            </button>
+            <div id="userInput">
+              <input
+                id="textInput"
+                type="text"
+                name="msg"
+                placeholder="Type your response..."
+              />
+            </div>
+            <button id="resetButton">Reset chat</button>
+          </div>
+        </div>
+        <script>
+          const inputBox = $("#textInput");
+          const proceedButton = $("#proceedButton");
+          const resetButton = $("#resetButton");
+
+          function getBotResponse() {
+            var rawText = inputBox.val();
+            var userHtml =
+              '<div class="text"><div class="userText"><p>' +
+              rawText +
+              "</p></div></div>";
+            inputBox.val("");
+            $("#chatbox").append(userHtml);
+            document
+              .getElementById("userInput")
+              .scrollIntoView({ block: "start", behavior: "smooth" });
+            $.get("/get", { msg: rawText }).done(function (data) {
+              var botHtml =
+                '<div class="text"><div class="botText"><p>' +
+                data.replaceAll("\n", "<br>").replaceAll("\t", "&emsp;") +
+                "</p></div></div>";
+              $("#chatbox").append(botHtml);
+              document
+                .getElementById("userInput")
+                .scrollIntoView({ block: "start", behavior: "smooth" });
+              proceedButton.show();
+            });
+          }
+          inputBox.keypress(function (e) {
+            if (e.which === 13) {
+              getBotResponse();
+            }
+          });
+          proceedButton.click((e) => {
+            var userHtml =
+              '<div class="text"><div class="userText"><p><em>Skipped question</em></p></div></div>';
+            inputBox.val("");
+            $("#chatbox").append(userHtml);
+            document
+              .getElementById("userInput")
+              .scrollIntoView({ block: "start", behavior: "smooth" });
+            $.get("/get", { msg: "Skip this question." }).done((data) => {
+              var botHtml =
+                '<div class="text"><div class="botText"><p>' +
+                data +
+                "</p></div></div>";
+              $("#chatbox").append(botHtml);
+              document
+                .getElementById("userInput")
+                .scrollIntoView({ block: "start", behavior: "smooth" });
+            });
+          });
+          resetButton.click((e) => {
+            $.post("/clear").done(() => {
+              inputBox.val("");
+              location.reload();
+            });
+          });
+        </script>
+      </div>
+    </div>
+  </body>
+</html>

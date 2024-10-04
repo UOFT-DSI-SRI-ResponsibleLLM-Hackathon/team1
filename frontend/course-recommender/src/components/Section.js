@@ -3,34 +3,27 @@ import React from 'react';
 import Card from './Card';
 import TeamBadge from './TeamBadge';
 import PriceCard from './PriceCard';
-// import './Section.css';
+import CourseInput from './CourseInput';
 import './../App.css';
+import deveoper_icon from './../images/Frontend_Developer_Icon.jpg';
+import computer_icon from './../images/Computer_Icon.jpg'
 
 const Section = () => {
   return (
     <main>
       <section className="flex-sect">
         <div className="container-width">
-          <div className="flex-title">Flex is the new black</div>
-          <div className="flex-desc">With flexbox system you're able to build complex layouts easily and with free responsivity</div>
+            <CourseInput />
+        </div>
+      </section>
+      <section className="am-sect">
+        <div className="container-width">
+        <div className="flex-title">Explore These Courses</div>
+          <div className="flex-desc">The following courses might be helpful for your future study</div>
           <div className="cards">
             {[...Array(6)].map((_, i) => (
               <Card key={i} title={`Title ${i + 1}`} subtitle={`Subtitle ${i + 1}`} />
             ))}
-          </div>
-        </div>
-      </section>
-      {/* Asset Manager Section */}
-      <section className="am-sect">
-        <div className="container-width">
-          <div className="am-container">
-            <img src="/assets/images/demos/phone-app.png" alt="Phone App" className="img-phone" />
-            <div className="am-content">
-              <div className="am-pre">ASSET MANAGER</div>
-              <div className="am-title">Manage your images with Asset Manager</div>
-              <div className="am-desc">You can create image blocks with the command from the left panel and edit them with double click</div>
-              <div className="am-post">Image uploading is not allowed in this demo</div>
-            </div>
           </div>
         </div>
       </section>
@@ -51,9 +44,36 @@ const Section = () => {
         <div className="container-width">
           <h1 className="bdg-title">The team</h1>
           <div className="badges">
-            <TeamBadge name="Adam Smith" role="CEO" image="/assets/images/demos/team1.jpg" />
-            <TeamBadge name="John Black" role="Software Engineer" image="/assets/images/demos/team2.jpg" />
-            <TeamBadge name="Jessica White" role="Web Designer" image="/assets/images/demos/team3.jpg" />
+            <TeamBadge 
+                name="Haoran Zhao " 
+                role="Software Engineer" 
+                image={deveoper_icon}
+                description="The database wizard, conjuring up magical data structures that keep everything running smoothly!"/>
+            <TeamBadge 
+                name="Jinyang Zhao" 
+                role="Software Engineer" 
+                image={deveoper_icon}
+                description="The frontend developer crafting sleek and user-friendly interfaces."/>
+            <TeamBadge 
+                name="Xiao Hu" 
+                role="Software Engineer"
+                image={deveoper_icon}
+                description="The AI specialist designing smart models to enhance our project’s capabilities."/>
+            <TeamBadge 
+                name="Jiantong Lyu" 
+                role="Software Engineer"
+                image={deveoper_icon}
+                description="The database analyst ensuring our data is organized and efficient."/>
+            <TeamBadge 
+                name="Paul Tang" 
+                role="Software Engineer"
+                image={deveoper_icon}
+                description="The AI model expert helping to bring intelligent solutions to the table"/>
+            <TeamBadge 
+                name="ChatGPT" 
+                role="Software Engineer"
+                image={computer_icon}
+                description="Our witty virtual assistant, we can't live without it!"/>
           </div>
         </div>
       </section>

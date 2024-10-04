@@ -5,6 +5,9 @@
     justify-content: center;
     margin: 20px;
   }
+  .form{
+    width: 100%;
+  }
   
   .course-input {
     width: 100%; /* 输入框宽度 */
@@ -95,5 +98,43 @@
       transparent
     );
     position: absolute;
+  }
+  
+
+  .chatbox {
+    margin-top: 1rem;
+    max-height: 400px; /* Adjust based on your preference */
+    overflow-y: auto; /* Enable scrolling if the chat gets too long */
+    width: 100%;
+  }
+  
+  .text {
+    display: flex;
+    width: 100%;
+    font-size: 1rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  .botText {
+    background-color: steelblue;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 2rem;
+    max-width: 85%;
+    min-width: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .userText {
+    background-color: lightgray;
+    color: black;
+    padding: 0.5rem;
+    border-radius: 2rem;
+    max-width: 85%;
+    min-width: 0;
+    margin-left: auto; /* Align user messages to the right */
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   

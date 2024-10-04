@@ -1,11 +1,11 @@
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-# import spacy
+import spacy
 import json
-# nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_sm")
 
 
 class TextSplitter:
-    def __init__(self, raw_data=None, chunk_size=50, chunk_overlap=20):
+    def __init__(self, chunk_size=100, chunk_overlap=0, raw_data=None):
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         if raw_data:
@@ -17,9 +17,9 @@ class TextSplitter:
         splitter = RecursiveCharacterTextSplitter(chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap)
         return splitter.split_text(text)
 
-    # def sentence_split(text):
-    #     doc = nlp(text)
-    #     return [sent.text for sent in doc.sents]
+    def sentence_split(self, text):
+        doc = nlp(text)
+        return [sent.text for sent in doc.sents]
 
     def load_json(self, file_name):
         with open(file_name, 'r') as file:
@@ -30,7 +30,7 @@ class TextSplitter:
         all_chunks = []
         for entry in self.raw_data:
             description = entry['description']
-            chunks = self.chunk_split(description)
+            chunks = self.sentence_split(description)
             all_chunks.extend(chunks)
             for chunk in chunks:
                 new_entry = {
@@ -50,4 +50,5 @@ class TextSplitter:
 if __name__ == '__main__':
     splitter = TextSplitter(chunk_size=50, chunk_overlap=20)
     splitter.load_json('short_test.json')
+    splitter.process_json()
     splitter.save_json('processed_short.json')

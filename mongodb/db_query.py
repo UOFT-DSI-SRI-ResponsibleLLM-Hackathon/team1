@@ -40,21 +40,7 @@ class TextRetriever:
         print(related_doc_indices)
         retrieved_docs = [self.documents[i] for i in related_doc_indices]
         print("[TextRetriever] Retrieved top {} documents for the query.".format(self.top_k))
-        return retrieved_docs
-    
-#db = open('tester.txt', 'r')
-if __name__ == "__main__":
-    db = [
-        "Dehydration occurs when your body loses more fluids than it takes in. Symptoms include dry mouth, fatigue, dizziness, and decreased urine output.",
-        "Hydration is essential for maintaining bodily functions. Common signs of adequate hydration include regular urination and moist skin.",
-        "Severe dehydration can lead to serious complications such as heatstroke, kidney failure, and seizures.",
-        "Mild dehydration can often be remedied by drinking water or electrolyte-rich beverages.",
-        "Athletes are particularly susceptible to dehydration and should monitor their fluid intake closely during training and competition."
-    ]
-    retriever = TextRetriever(db, top_k=2)
-    user_query = "What is the dehydration?"
-    retrieved_docs = retriever.retrieve(user_query)
-    print(retrieved_docs)
+        return retrieved_docs, related_doc_indices
 
 class LLMQuery:
     def __init__(self, api_key, model="llama-3.1-8b-instant", max_tokens=10000, api_base=None):
@@ -164,8 +150,12 @@ class LLMQuery_with_TextRetriever:
         self.TextRetriever = TextRetriever
         print("[LLMQuery_with_TextRetriever] Initialized with model {}.".format(self.LLMQuery.model))
 
+    def get_indices(self, user_prompt):
+        retrieved_docs, retrieved_indices = self.TextRetriever.retrieve(user_prompt)
+        return retrieved_indices
+
     def query_with_retrieve(self, user_prompt):
-        retrieved_docs = self.TextRetriever.retrieve(user_prompt)
+        retrieved_docs, retrieved_indices = self.TextRetriever.retrieve(user_prompt)
 
         augmented_prompt = user_prompt + "\n\nThe following retrieved content may be used to aid your response: " + "\n" + "\n".join(retrieved_docs)
 
@@ -238,9 +228,20 @@ def get_all_chunks():
     return chunks
 
 
+def get_description_by_index(indices):
+    client = MongoClient('mongodb://localhost:27017/')
+    db = client['university_courses']
+    courses_collection = db['courses']
+
+    descriptions = []
+    for i in indices:
+        descriptions.append(courses_collection[i].find({}, {'description': 1, '_id': 0}))
+    return descriptions
+
+
 if __name__ == "__main__":
     splitter = TextSplitter()
-    splitter.load_json("/home/huxiao/team1/mongodb/courses.json")
+    splitter.load_json("/h/290/elizabeth/paul/team1/mongodb/courses.json")
     splitter.process_json()
     
     course_chunks = splitter.chunks
@@ -253,6 +254,9 @@ if __name__ == "__main__":
 
     llm_with_retriever = LLMQuery_with_TextRetriever(llm, retriever)
     user_query = "I am a first year CS student, what are some courses you recommend?"
+    retrieved_indices = llm_with_retriever.get_indices(user_query)
+    descriptions = get_description_by_index(retrieved_indices)
+    print(descriptions)
 
-    response = llm_with_retriever.query_with_retrieve(user_query)
-    print(response)
+    # response = llm_with_retriever.query_with_retrieve(user_query)
+    # print(response)

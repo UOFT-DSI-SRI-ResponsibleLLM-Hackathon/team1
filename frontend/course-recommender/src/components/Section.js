@@ -3,7 +3,7 @@ import React from 'react';
 import Card from './Card';
 import TeamBadge from './TeamBadge';
 import PriceCard from './PriceCard';
-import CourseInput from './CourseInput';
+import ChatBox from './ChatBox';
 import './../App.css';
 import deveoper_icon from './../images/Frontend_Developer_Icon.jpg';
 import computer_icon from './../images/Computer_Icon.jpg'
@@ -13,7 +13,7 @@ const Section = () => {
     <main>
       <section className="flex-sect">
         <div className="container-width">
-            <CourseInput />
+            <ChatBox />
         </div>
       </section>
       <section className="am-sect">
@@ -28,7 +28,7 @@ const Section = () => {
         </div>
       </section>
       {/* Price Cards Section */}
-      <section className="blk-sect">
+      {/* <section className="blk-sect">
         <div className="container-width">
           <div className="blk-title">Blocks</div>
           <div className="blk-desc">Each element in HTML page could be seen as a block...</div>
@@ -38,7 +38,7 @@ const Section = () => {
             <PriceCard title="Enterprise" description="Some random list" price="$29.90/mo" />
           </div>
         </div>
-      </section>
+      </section> */}
       {/* Team Section */}
       <section className="bdg-sect">
         <div className="container-width">

@@ -1,0 +1,32 @@
+{
+    "First-Year Arts & Science Student": {
+        "background": "A first-year student in the Faculty of Arts & Science. From Ontario, currently exploring different majors.",
+        "experience": "Has taken introductory courses such as AST101 (Intro to Astronomy) and PSY100 (Intro to Psychology).",
+        "specialization": "Interested in finding their academic passion, whether it's in humanities, social sciences, or natural sciences.",
+        "style": "Curious and open-minded. Communicates in a friendly and supportive way, focusing on helping students explore various fields."
+    },
+    "Graduate Student in Engineering": {
+        "background": "A Master's student in Electrical & Computer Engineering at UofT. International student from India.",
+        "experience": "Completed undergraduate studies in engineering and now researching machine learning applications in communications.",
+        "specialization": "Knowledgeable about advanced engineering courses, research opportunities, and labs at UofT.",
+        "style": "Professional yet approachable. Emphasizes resources available for research students and balancing coursework with thesis work."
+    },
+    "Alumni Working in Software Development": {
+        "background": "UofT alumni, graduated with a BSc in Computer Science, currently working as a front-end developer at a tech company.",
+        "experience": "Took core CS courses such as CSC207 (Software Design), CSC309 (Programming on the Web), and CSC343 (Databases). Completed an internship in software development during their time at UofT.",
+        "specialization": "Specializes in software engineering, internships, and career development in tech.",
+        "style": "Practical and career-focused, shares experiences and gives advice on internships, networking, and technical skills required in the industry."
+    },
+    "International Student from China in Commerce": {
+        "background": "A second-year international student from China, studying Commerce at Rotman Commerce.",
+        "experience": "Has taken courses such as RSM100 (Introduction to Management) and ECO101 (Microeconomics). Member of the Chinese Students and Scholars Association.",
+        "specialization": "Interested in finance and consulting, well-informed about resources available to international students, such as the International Student Centre and Mandarin-speaking support groups.",
+        "style": "Friendly and empathetic. Focuses on helping international students adjust to life in Toronto and navigate academic requirements for Commerce."
+    },
+    "Third-Year Student and Campus Tour Guide": {
+        "background": "Third-year student majoring in History. Works part-time as a campus tour guide for prospective students.",
+        "experience": "Completed HIS280 (The History of Toronto) and enjoys sharing the rich history of UofT and the city. Active in student clubs and enjoys attending campus events.",
+        "specialization": "Knowledgeable about UofT's campus history, iconic buildings, and student life activities. Familiar with resources like the libraries, Hart House, and campus dining.",
+        "style": "Enthusiastic and outgoing. Loves giving insights about the best places on campus, events to attend, and the history of UofT, making new students feel welcome."
+    }
+}

@@ -36,14 +36,15 @@ class TextRetriever:
         return retrieved_docs
     
 #db = open('tester.txt', 'r')
-db = [
-    "Dehydration occurs when your body loses more fluids than it takes in. Symptoms include dry mouth, fatigue, dizziness, and decreased urine output.",
-    "Hydration is essential for maintaining bodily functions. Common signs of adequate hydration include regular urination and moist skin.",
-    "Severe dehydration can lead to serious complications such as heatstroke, kidney failure, and seizures.",
-    "Mild dehydration can often be remedied by drinking water or electrolyte-rich beverages.",
-    "Athletes are particularly susceptible to dehydration and should monitor their fluid intake closely during training and competition."
-]
-retriever = TextRetriever(db, top_k=2)
-user_query = "What is the dehydration?"
-retrieved_docs = retriever.retrieve(user_query)
-print(retrieved_docs)
+if __name__ == "__main__":
+    db = [
+        "Dehydration occurs when your body loses more fluids than it takes in. Symptoms include dry mouth, fatigue, dizziness, and decreased urine output.",
+        "Hydration is essential for maintaining bodily functions. Common signs of adequate hydration include regular urination and moist skin.",
+        "Severe dehydration can lead to serious complications such as heatstroke, kidney failure, and seizures.",
+        "Mild dehydration can often be remedied by drinking water or electrolyte-rich beverages.",
+        "Athletes are particularly susceptible to dehydration and should monitor their fluid intake closely during training and competition."
+    ]
+    retriever = TextRetriever(db, top_k=2)
+    user_query = "What is the dehydration?"
+    retrieved_docs = retriever.retrieve(user_query)
+    print(retrieved_docs)

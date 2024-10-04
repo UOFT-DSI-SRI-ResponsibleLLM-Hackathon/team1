@@ -244,8 +244,8 @@ if __name__ == "__main__":
     splitter.process_json()
     
     course_chunks = splitter.chunks
-    print(course_chunks[:5])
-    retriever = DPRRetriever(course_chunks)
+    #retriever = DPRRetriever(course_chunks)
+    retriever = TextRetriever(course_chunks)
 
     groq_api_key = "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"
     api_base = "https://api.groq.com/openai/v1"

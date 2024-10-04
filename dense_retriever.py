@@ -25,7 +25,6 @@ class DPRRetriever:
             self.device = device
         else:
             self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
         # Initialize DPR encoders and tokenizers with max_length
         self.ctx_tokenizer = DPRContextEncoderTokenizer.from_pretrained(
             'facebook/dpr-ctx_encoder-single-nq-base',

@@ -98,3 +98,24 @@ class DPRRetriever:
 
         print(f"[DPRRetriever] Retrieved top {self.top_k} documents for the query.")
         return retrieved_docs
+
+db = [
+    "Dehydration occurs when your body loses more fluids than it takes in. Symptoms include dry mouth, fatigue, dizziness, and decreased urine output.",
+    "Hydration is essential for maintaining bodily functions. Common signs of adequate hydration include regular urination and moist skin.",
+    "Severe dehydration can lead to serious complications such as heatstroke, kidney failure, and seizures.",
+    "Mild dehydration can often be remedied by drinking water or electrolyte-rich beverages.",
+    "Athletes are particularly susceptible to dehydration and should monitor their fluid intake closely during training and competition."
+]
+# Initialize the DPRRetriever
+retriever = DPRRetriever(documents=db, top_k=3)
+
+# User Query
+user_query = "What are the symptoms of dehydration?"
+
+# Retrieve Top-K Documents
+retrieved_docs = retriever.retrieve(user_query)
+
+# Display Retrieved Documents
+print("\nRetrieved Documents:")
+for idx, doc in enumerate(retrieved_docs, 1):
+    print(f"{idx}. {doc}")

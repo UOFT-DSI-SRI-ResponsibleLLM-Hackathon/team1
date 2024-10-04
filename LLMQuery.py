@@ -1,6 +1,7 @@
 from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 import json
+from retriever import TextRetriever
 
 class LLMQuery:
     def __init__(self, api_key, model="llama-3.1-8b-instant", max_tokens=150, api_base=None):
@@ -72,6 +73,25 @@ class LLMQuery:
             print("[LLMQuery] An error occurred while saving chat:", e)
             raise
 
+
+class LLMQuery_with_TextRetriever():
+    def __init__(self, LLMQuery, TextRetriever):
+        self.LLMQuery = LLMQuery
+        self.TextRetriever = TextRetriever
+        print("[LLMQuery_with_TextRetriever] Initialized with model {}.".format(self.LLMQuery.model))
+
+    def query_with_retrieve(self, user_prompt):
+        retrieved_docs = self.TextRetriever.retrieve(user_prompt)
+
+        augmented_prompt = user_prompt + "\n\nThe following retrieved content can be used to aid your response: " + "\n" + "\n".join(retrieved_docs)
+
+        answer = self.LLMQuery.query(augmented_prompt)
+
+        return answer
+
+
+
+
 # Example usage
 if __name__ == "__main__":
     groq_api_key = "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"
@@ -79,11 +99,27 @@ if __name__ == "__main__":
 
     llm = LLMQuery(groq_api_key, model="llama-3.1-8b-instant", api_base=api_base)
 
-    # Multi-turn conversation
-    response1 = llm.query("What are some good courses for an undergrad CS student at the University of Toronto?")
-    print("Response:", response1)
+    # Test 1: Multi-turn conversation
+    # response1 = llm.query("What are some good courses for an undergrad CS student at the University of Toronto?")
+    # print("Response:", response1)
     
-    response2 = llm.query("What do you recommend I take in my first year?")
-    print("Response:", response2)
+    # response2 = llm.query("What do you recommend I take in my first year?")
+    # print("Response:", response2)
 
-    llm.save_chat("./sample_response.json")
+    # Test 2: LLMQuery with Retriever
+    db = [
+        "Dehydration occurs when your body loses more fluids than it takes in. Symptoms include dry mouth, fatigue, dizziness, and decreased urine output.",
+        "Hydration is essential for maintaining bodily functions. Common signs of adequate hydration include regular urination and moist skin.",
+        "Severe dehydration can lead to serious complications such as heatstroke, kidney failure, and seizures.",
+        "Mild dehydration can often be remedied by drinking water or electrolyte-rich beverages.",
+        "Athletes are particularly susceptible to dehydration and should monitor their fluid intake closely during training and competition."
+    ]
+    doc_retriever = TextRetriever(db, top_k=2)
+
+    llm_with_retriever = LLMQuery_with_TextRetriever(llm, doc_retriever)
+    user_query = "What is the dehydration?"
+
+    response = llm_with_retriever.query_with_retrieve(user_query)
+    print("Response:", response)
+
+    llm_with_retriever.LLMQuery.save_chat("./sample_response_with_retriever.json")

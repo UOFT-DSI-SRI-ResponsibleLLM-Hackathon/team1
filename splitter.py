@@ -4,46 +4,50 @@ import json
 # nlp = spacy.load("en_core_web_sm")
 
 
-def chunk_split(text, chunk_size=50, chunk_overlap=20):
-    splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-    return splitter.split_text(text)
+class TextSplitter:
+    def __init__(self, chunk_size=50, chunk_overlap=20, raw_data=None):
+        self.chunk_size = chunk_size
+        self.chunk_overlap = chunk_overlap
+        if raw_data:
+            self.raw_data = raw_data
+        self.processed_data = None
+        self.chunks = None
 
-# def sentence_split(text):
-#     doc = nlp(text)
-#     return [sent.text for sent in doc.sents]
+    def chunk_split(self, text):
+        splitter = RecursiveCharacterTextSplitter(chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap)
+        return splitter.split_text(text)
+
+    # def sentence_split(text):
+    #     doc = nlp(text)
+    #     return [sent.text for sent in doc.sents]
+
+    def load_json(self, file_name):
+        with open(file_name, 'r') as file:
+            self.raw_data = json.load(file)
+
+    def process_json(self):
+        new_data = []
+        all_chunks = []
+        for entry in self.raw_data:
+            description = entry['description']
+            chunks = self.chunk_split(description)
+            all_chunks.extend(chunks)
+            for chunk in chunks:
+                new_entry = {
+                    'title': entry['title'],
+                    'code': entry['code'],
+                    'chunk': chunk
+                }
+                new_data.append(new_entry)
+        self.processed_data = new_data
+        self.chunks = all_chunks
+
+    def save_json(self, file_name):
+        with open(file_name, 'w') as file:
+            json.dump(self.processed_data, file)
 
 
-def load_json(file_name):
-    with open(file_name, 'r') as file:
-        data = json.load(file)
-    return data
-
-
-def process_json(data):
-    new_data = []
-    all_chunks = []
-    for entry in data:
-        description = entry['description']
-        chunks = chunk_split(description)
-        all_chunks.extend(chunks)
-        for chunk in chunks:
-            new_entry = {
-                'title': entry['title'],
-                'code': entry['code'],
-                'chunk': chunk
-            }
-            new_data.append(new_entry)
-    return new_data, all_chunks
-
-
-def save_json(data, file_name):
-    with open(file_name, 'w') as file:
-        json.dump(data, file)
-
-
-# if __name__ == '__main__':
-#     data = load_json('short_test.json')
-#     processed_data = process_json(data)
-#     print(processed_data)
-#     save_json(processed_data, 'processed_short.json')
-#     print('Data processing complete.')
+if __name__ == '__main__':
+    splitter = TextSplitter(chunk_size=50, chunk_overlap=20)
+    splitter.load_json('short_test.json')
+    splitter.save_json('processed_short.json')

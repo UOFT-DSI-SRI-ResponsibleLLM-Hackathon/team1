@@ -2,11 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
 import time  # For adding delays between requests
-import nltk
-from sentence_transformers import SentenceTransformer
+# import nltk
+# from sentence_transformers import SentenceTransformer
 from mongodb.splitter import save_json
 
-nltk.download('punkt')
+# nltk.download('punkt')
 
 
 def scrape_course_data():

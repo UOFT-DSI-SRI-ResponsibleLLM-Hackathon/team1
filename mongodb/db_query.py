@@ -229,14 +229,18 @@ def get_all_chunks():
 
 
 def get_description_by_index(indices):
+    # Connect to MongoDB
     client = MongoClient('mongodb://localhost:27017/')
     db = client['university_courses']
     courses_collection = db['courses']
 
-    descriptions = []
-    for i in indices:
-        descriptions.append(courses_collection[i].find({}, {'description': 1, '_id': 0}))
-    return descriptions
+    # Use the $in operator to query documents where 'index' is in the list of indices
+    descriptions_cursor = courses_collection.find({'index': {'$in': indices}}, {'description': 1, '_id': 0})
+
+    # Convert the cursor to a list of descriptions, removing duplicates by using a set
+    descriptions = set({doc['description'] for doc in descriptions_cursor})
+
+    return list(descriptions)
 
 
 if __name__ == "__main__":

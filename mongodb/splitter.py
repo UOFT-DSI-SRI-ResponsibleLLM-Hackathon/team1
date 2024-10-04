@@ -1,7 +1,8 @@
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-import spacy
 import json
-nlp = spacy.load("en_core_web_sm")
+import nltk
+
+nltk.download('punkt_tab')
 
 
 class TextSplitter:
@@ -17,9 +18,16 @@ class TextSplitter:
         splitter = RecursiveCharacterTextSplitter(chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap)
         return splitter.split_text(text)
 
-    def sentence_split(self, text):
-        doc = nlp(text)
-        return [sent.text for sent in doc.sents]
+    # def sentence_split(self, text):
+    #     doc = nlp(text)
+    #     return [sent.text for sent in doc.sents]
+    
+    def sentence_split(self, text, max_sentences=1):
+        """
+        Split text into chunks of a maximum number of sentences.
+        """
+        sentences = nltk.sent_tokenize(text)
+        return [' '.join(sentences[i:i+max_sentences]) for i in range(0, len(sentences), max_sentences)]
 
     def load_json(self, file_name):
         with open(file_name, 'r') as file:
@@ -28,17 +36,21 @@ class TextSplitter:
     def process_json(self):
         new_data = []
         all_chunks = []
+        index = 0
         for entry in self.raw_data:
             description = entry['description']
             chunks = self.sentence_split(description)
             all_chunks.extend(chunks)
             for chunk in chunks:
                 new_entry = {
+                    'index': index,
                     'title': entry['title'],
                     'code': entry['code'],
-                    'chunk': chunk
+                    'chunk': chunk,
+                    'description': description
                 }
                 new_data.append(new_entry)
+                index += 1
         self.processed_data = new_data
         self.chunks = all_chunks
 

@@ -127,7 +127,7 @@ class DPRRetriever:
         retrieved_docs = [self.documents[idx] for idx in indices[0]]
 
         print(f"[DPRRetriever] Retrieved top {self.top_k} documents for the query.")
-        return retrieved_docs
+        return retrieved_docs, indices
 
 
 db = [
@@ -149,9 +149,9 @@ retriever = DPRRetriever(documents=db, top_k=3)
 user_query = "What are athletes susceptible to?"
 
 # Retrieve Top-K Documents
-retrieved_docs = retriever.retrieve(user_query)
 embeddings = retriever.encode()
-print(embeddings)
+retrieved_docs, chunk_indices = retriever.retrieve(user_query)
+print(chunk_indices.squeeze()) # this is the list of chunk indices that you will need to index into the db
 
 # Display Retrieved Documents
 print("\nRetrieved Documents:")

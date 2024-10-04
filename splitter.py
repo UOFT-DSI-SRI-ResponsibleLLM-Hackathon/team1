@@ -20,11 +20,18 @@ def load_json(file_name):
 
 
 def process_json(data):
+    new_data = []
     for entry in data:
         description = entry['description']
         chunks = chunk_split(description)
-        entry['description'] = chunks
-    return data
+        for chunk in chunks:
+            new_entry = {
+                'title': entry['title'],
+                'code': entry['code'],
+                'chunk': chunk
+            }
+            new_data.append(new_entry)
+    return new_data
 
 
 def save_json(data, file_name):
@@ -32,9 +39,9 @@ def save_json(data, file_name):
         json.dump(data, file)
 
 
-# if __name__ == '__main__':
-#     data = load_json('short_test.json')
-#     processed_data = process_json(data)
-#     print(processed_data)
-#     save_json(processed_data, 'processed_short.json')
-#     print('Data processing complete.')
+if __name__ == '__main__':
+    data = load_json('short_test.json')
+    processed_data = process_json(data)
+    print(processed_data)
+    save_json(processed_data, 'processed_short.json')
+    print('Data processing complete.')

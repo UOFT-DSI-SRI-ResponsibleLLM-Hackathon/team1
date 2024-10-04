@@ -7,6 +7,7 @@ from transformers import LlamaTokenizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 import numpy as np
+from splitter import TextSplitter
 
 class TextRetriever:
     def __init__(self, documents, top_k=5):
@@ -238,7 +239,12 @@ def get_all_chunks():
 
 
 if __name__ == "__main__":
-    course_chunks = get_all_chunks()
+    splitter = TextSplitter()
+    splitter.load_json("/home/huxiao/team1/mongodb/courses.json")
+    splitter.process_json()
+    
+    course_chunks = splitter.chunks
+    print(course_chunks[:5])
     retriever = DPRRetriever(course_chunks)
 
     groq_api_key = "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"

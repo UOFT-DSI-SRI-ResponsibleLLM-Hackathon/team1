@@ -43,6 +43,24 @@ class DPRRetriever:
 
         print(f"[DPRRetriever] Initialized with {len(self.documents)} documents. Using device: {self.device}")
 
+    def encode(self):
+        # Encode documents
+        ctx_input = self.ctx_tokenizer(
+            self.documents,
+            padding=True,
+            truncation=True,
+            max_length=self.max_length,  # Ensure truncation
+            return_tensors='pt'
+        )
+
+        with torch.no_grad():
+            ctx_embeddings = self.ctx_encoder(
+                input_ids=ctx_input['input_ids'].to(self.device),
+                attention_mask=ctx_input['attention_mask'].to(self.device)
+            ).pooler_output  # Shape: (num_docs, hidden_size)
+            
+        return ctx_embeddings
+    
     def _build_index(self):
         """
         Encodes all documents and builds the FAISS index.
@@ -132,6 +150,8 @@ user_query = "What are athletes susceptible to?"
 
 # Retrieve Top-K Documents
 retrieved_docs = retriever.retrieve(user_query)
+embeddings = retriever.encode()
+print(embeddings)
 
 # Display Retrieved Documents
 print("\nRetrieved Documents:")

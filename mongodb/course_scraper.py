@@ -1,10 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from pymongo import MongoClient
-import time  # For adding delays between requests
-# import nltk
-# from sentence_transformers import SentenceTransformer
-from mongodb.splitter import save_json
+import json
 
 # nltk.download('punkt')
 
@@ -58,7 +55,7 @@ def scrape_course_data():
                 course = {
                     'title': title,
                     'code': code,
-                    'description': course_details
+                    'description': course_details,
                 }
 
                 courses.append(course)
@@ -76,4 +73,6 @@ def scrape_course_data():
 if __name__ == '__main__':
     courses = scrape_course_data()
     print(f"Scraped {len(courses)} courses.")
-    save_json(courses, 'courses.json')
+    file_name = 'courses.json'
+    with open(file_name, 'w') as file:
+            json.dump(courses, file)

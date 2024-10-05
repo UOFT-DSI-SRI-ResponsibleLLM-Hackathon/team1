@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ChatBox.css';
 import chat_bot_icon from "./../images/chat_bot_icon.jpg"
-import axios from 'axios';
 
 function ChatBox() {
   const [input, setInput] = useState('');

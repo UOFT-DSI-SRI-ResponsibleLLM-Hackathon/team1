@@ -45,18 +45,23 @@ function ChatBox() {
   };
 
   const getBotResponse = async (userMessage) => {  // 调用后端API，取得回复
-    // // Mock response instead of fetching from server
-    // const fakeResponse = "This is a mock response to your input: " + userMessage;
-    // // Simulate delay to mimic API response time
-    // setTimeout(() => {
-    //   setChatHistory(prev => [...prev, { text: fakeResponse, isBot: true }]);
-    // }, 500);
-
     try {
-      // 使用完整的后端 URL 地址来发送请求
-      const response = await fetch(`http://localhost:5000`);
-      const data = await response.text();
-      setChatHistory(prev => [...prev, { text: data, isBot: true }]);
+      const response = await fetch('http://localhost:5000/query', {
+        method: 'POST',  // Specify the POST method
+        headers: {
+          'Content-Type': 'application/json',  // Indicate the content type
+        },
+        body: JSON.stringify({ message: userMessage })  // Send the message as JSON
+      });
+      
+      if (!response.ok) {  // Check if the response is okay
+        throw new Error('Network response was not ok');
+      }
+      
+      const data = await response.json();  // Get the response text
+      const botMessage = data.response;  // Extract the response string
+
+      setChatHistory(prev => [...prev, { text: botMessage, isBot: true }]);
     } catch (error) {
       console.error("Error fetching bot response:", error);
     }

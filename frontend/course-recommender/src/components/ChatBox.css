@@ -1,138 +1,263 @@
-.input-container {
-    display: flex;
-    justify-content: center;
-    margin: 20px;
-  }
-  .form{
-    width: 100%;
-  }
-  
-  .course-input {
-    width: 100%; /* 输入框宽度 */
-    height: 150px; /* 输入框高度 */
-    padding: 10px;
-    font-size: 16px;
-    margin-bottom: 10px; /* 按钮与输入框之间的间隔 */
-    border-radius: 8px; /* 圆角 */
-    border: 1px solid #ccc; /* 边框 */
-    box-sizing: border-box; /* 包含 padding 和 border */
-    resize: none; /* 禁用调整大小 */
-    outline: none; /* 去掉默认外边框 */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
-    transition: border-color 0.3s; /* 添加平滑过渡 */
+.chatbox-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  /* justify-content: flex-end; */
 
-    /* background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00,#ffff00, #ff0000, #fb0094, 
-    #0000ff, #00ff00,#ffff00, #ff0000);
-    background-size: 400%;
-    filter: blur(100px); */
-  }
-  
-  .course-input:focus {
-    border-color: #3fe9ff; /* 聚焦时改变边框颜色 */
-  }
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+}
 
-  
-  /* 其他 CSS 样式保持不变 */
-  .button {
-    cursor: pointer;
-    font-size: 1.4rem;
-    border-radius: 16px;
-    border: none;
-    padding: 2px;
-    background: radial-gradient(circle 80px at 80% -10%, #ffffff, #181b1b);
-    position: relative;
-    float: right; /* 右对齐 */
-  }
-  
-  /* 继续保持其他 button 的样式 */
-  .button::after {
-    content: "";
-    position: absolute;
-    width: 65%;
-    height: 60%;
-    border-radius: 120px;
-    top: 0;
-    right: 0;
-    box-shadow: 0 0 20px #ffffff38;
-    z-index: -1;
-  }
-  
-  .blob1 {
-    position: absolute;
-    width: 70px;
-    height: 100%;
-    border-radius: 16px;
-    bottom: 0;
-    left: 0;
-    background: radial-gradient(
-      circle 60px at 0% 100%,
-      #3fe9ff,
-      #0000ff80,
-      transparent
-    );
-    box-shadow: -10px 10px 30px #0051ff2d;
-  }
-  
-  .inner {
-    padding: 14px 25px;
-    border-radius: 14px;
-    color: #fff;
-    z-index: 3;
-    position: relative;
-    background: radial-gradient(circle 80px at 80% -50%, #777777, #0f1111);
-  }
-  
-  .inner::before {
-    content: "";
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    border-radius: 14px;
-    background: radial-gradient(
-      circle 60px at 0% 100%,
-      #00e1ff1a,
-      #0000ff11,
-      transparent
-    );
-    position: absolute;
-  }
-  
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  background-color: white;
+}
 
-  .chatbox {
-    margin-top: 1rem;
-    max-height: 400px; /* Adjust based on your preference */
-    overflow-y: auto; /* Enable scrolling if the chat gets too long */
-    width: 100%;
-  }
+.chat-header .img-avatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-right: 20px;
+  margin-left: 20px;
+  /* background-color: #333; */
+}
+
+.chat-header .text-chat {
+  color: black;
+  margin: 0;
+  font-size: 20px;
+}
+
+.chatbox {
+  flex-grow: 1;
+  overflow-y: auto; /* 增加滚动条 */
+  padding: 1rem;
+  width: 100%;
+  /* background: #f7f7f7; */
+  background: #ffffff;
+  border-radius: 1rem;
+
+  margin-top: 1rem;
+  height: 600px; /* Adjust based on your preference */
+  width: 100%;
+}
+
+
+/* 聊天记录框样式 */
+.historyChat {
+  display: flex;
+  flex-direction: column;
+  max-height: 70vh; /* 设定最大高度 */
+}
+
+.text {
+  display: inline-block; /* 改为 inline-block 以根据内容自动调整宽度 */
+  max-width: 80%; /* 最大宽度控制在 85%，避免过长的消息铺满整个屏幕 */
+  font-size: 1.4rem; /* 修改字体大小为 1.2rem */
+  padding: 0.5rem;
+
+  margin-top: 1px;
+  margin-bottom: 1px;
+
+  word-wrap: break-word; /* 防止长单词撑破气泡 */
+  word-break: break-all;
+}
+
+/* 机器人回复样式 */
+.botText {
+  display: inline-block;
+  background-color: #4299e1;
+  color: white;
+
+  padding: 0.5rem;
+  border-radius: 1rem;
+
+  width: fit-content; /* 根据内容动态设定最小宽度 */
+  max-width: 80%;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+
+/* 用户输入样式 */
+.userText {
+  display: inline-block;
+  background-color: lightgray;
+  color: black;
+
+  padding: 0.5rem;
+  border-radius: 1rem;
+
+  width: fit-content;
+  max-width: 80%;
+
+  margin-left: auto; /* 右对齐 */
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+
+/* 固定的输入框样式 */
+.user-input {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  padding: 0.5rem;
+  border-top: 1px solid #ddd;
+}
   
-  .text {
-    display: flex;
-    width: 100%;
-    font-size: 1rem;
-    padding-bottom: 0.5rem;
-  }
+.course-input {
+  width: 100%; /* 输入框宽度 */
+  height: 100px; /* 输入框高度 */
+
+  border-radius: 8px; /* 圆角 */
+  border: 1px solid #ccc; /* 边框 */
+
+  padding: 10px;
+  padding: 0.5rem;
   
-  .botText {
-    background-color: steelblue;
-    color: white;
-    padding: 0.5rem;
-    border-radius: 2rem;
-    max-width: 85%;
-    min-width: 0;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .userText {
-    background-color: lightgray;
-    color: black;
-    padding: 0.5rem;
-    border-radius: 2rem;
-    max-width: 85%;
-    min-width: 0;
-    margin-left: auto; /* Align user messages to the right */
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-  
+  margin-bottom: 10px; /* 按钮与输入框之间的间隔 */
+  margin-right: 10px;
+
+  font-size: 22px;
+  box-sizing: border-box; /* 包含 padding 和 border */
+  resize: none; /* 禁用调整大小 */
+  outline: none; /* 去掉默认外边框 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+  transition: border-color 0.3s; /* 添加平滑过渡 */
+}
+
+.course-input:focus {
+  border-color: #3fe9ff; /* 聚焦时改变边框颜色 */
+}
+
+.trash-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgb(20, 20, 20);
+  border: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+  cursor: pointer;
+  transition-duration: .3s;
+  overflow: hidden;
+  position: relative;
+  margin-left: auto;
+  margin-right: 50px;
+}
+
+.svgIcon {
+  width: 12px;
+  transition-duration: .3s;
+}
+
+.svgIcon path {
+  fill: white;
+}
+
+.trash-button:hover {
+  width: 140px;
+  border-radius: 50px;
+  transition-duration: .3s;
+  background-color: rgb(255, 69, 69);
+  align-items: center;
+}
+
+.trash-button:hover .svgIcon {
+  width: 50px;
+  transition-duration: .3s;
+  transform: translateY(60%);
+}
+
+.trash-button::before {
+  position: absolute;
+  top: -20px;
+  content: "Delete";
+  color: white;
+  transition-duration: .3s;
+  font-size: 2px;
+}
+
+.trash-button:hover::before {
+  font-size: 13px;
+  opacity: 1;
+  transform: translateY(30px);
+  transition-duration: .3s;
+}
+
+
+
+
+
+
+
+.send-button {
+  font-family: inherit;
+  font-size: 18px;
+  background: linear-gradient(to bottom, #4dc7d9 0%,#66a6ff 100%);
+  color: white;
+  padding: 0.8em 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 25px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s;
+}
+
+.send-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+.send-button:active {
+  transform: scale(0.95);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.send-button span {
+  display: block;
+  margin-left: 0.4em;
+  transition: all 0.3s;
+}
+
+.send-button svg {
+  width: 18px;
+  height: 18px;
+  fill: white;
+  transition: all 0.3s;
+}
+
+.send-button .svg-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin-right: 0.5em;
+  transition: all 0.3s;
+}
+
+.send-button:hover .svg-wrapper {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.send-button:hover svg {
+  transform: rotate(45deg);
+}
+

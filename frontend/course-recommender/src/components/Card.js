@@ -9,7 +9,7 @@ const Card = ({ title, subtitle }) => {
       <div className="card-body">
         <div className="card-title">{title}</div>
         <div className="card-sub-title">{subtitle}</div>
-        <div className="card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</div>
+        <div className="card-desc">Card Description under Card.js</div>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import './../App.css';
 const TeamBadge = ({ name, role, image, description }) => {
   return (
     <div className="badge">
-      <div class="badge-header"></div>
+      <div className="badge-header"></div>
       <img src={image} alt={name} className="badge-avatar" />
       <div className="badge-body">
         <div className="badge-name">{name}</div>

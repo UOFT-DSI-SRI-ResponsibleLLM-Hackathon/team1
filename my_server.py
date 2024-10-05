@@ -27,17 +27,15 @@ def home():
 @app.route('/query', methods=['POST'])
 def query():
     try:
-        # Check for the correct Content-Type header
         if not request.is_json:
             return jsonify({"error": "Content-Type must be application/json"}), 415
 
-        # Parse the input JSON
         data = request.get_json()
         prompt = data.get("message", "")
         if not prompt:
             return jsonify({"error": "No prompt provided"}), 400
 
-        # Initialize LLMQuery only when needed
+        # Initialize LLMQuery
         if use_groq:
             api_base = "https://api.groq.com/openai/v1"
             if not groq_api_key:
@@ -48,18 +46,10 @@ def query():
                 return jsonify({"error": "OpenAI API key not found"}), 500
             llm = LLMQuery(openai_api_key, model="gpt-4o")
 
-        # Query the LLM
-        # response = llm.query(prompt)
+        # Query LLM
         response = llm.query_with_retrieve(prompt)
-
-        # Clear the LLM from memory after use
-        del llm
-        gc.collect()  # Force garbage collection to free up memory
-
+        # response = llm.query(prompt)
         return jsonify({"response": response})
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == '__main__':

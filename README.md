@@ -13,7 +13,7 @@ This project addresses this problem by providing a **Retrieval-Augmented Generat
 **Retrieval-Augmented Generation (RAG)** is a technique designed to enhance LLM performance by augmenting its knowledge with domain-specific data. This mitigates hallucination in generative models, where they produce irrelevant or inaccurate responses due to incomplete training data. In this project, we explored both state-of-the-art dense and sparse retrievers and figured that the choice of retriever based on our task is essential in the quality of the retrieved text.
 
 The **RAG pipeline** consists of two primary phases:
-1. **Data Indexing**: During this phase, course descriptions are encoded into vectors by our encoder in the dense retriever, and stored in a database along side with its course tile and course code.
+1. **Data Indexing and Encoding**: During this phase, course descriptions are encoded into vectors by our encoder in the dense retriever, and stored in a database along side with its course tile and course code.
 2. **Data Retrieval and Generation**: When a user makes a query, it is sent to the RAG pipeline. The RAG pipeline encodes the user query into its embedding, compares it with the embeddings for the course descriptions in the database, retrieves the top-k relevant descriptions, concat them with the user initial query, and finally feed them into the LLM. This additional information allows the model to generate accurate, context-aware responses.
 
 In our project, we implement the RAG pipeline using **Llama3 70b** to enhance its ability to provide more precise and relevant suggestions to UofT students.

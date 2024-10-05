@@ -1,13 +1,12 @@
 # UofT Course Recommendation and Planning Assistant using RAG
 
-Welcome to the **UofT Course Recommendation and Planning Assistant**, a project aimed at helping University of Toronto students receive accurate course suggestions by leveraging a **Retrieval-Augmented Generation (RAG)** pipeline. This system combines the power of large language models (LLMs) with retrieval techniques, utilizing domain-specific course data stored in MongoDB to enhance the relevance and precision of responses.
+Welcome to the **UofT Course Recommendation and Planning Assistant**, a project aimed at helping University of Toronto students receive accurate course suggestions by leveraging a **Retrieval-Augmented Generation (RAG)** pipeline. This system combines the power of large language models (LLMs) with text retrieval techniques, utilizing domain-specific course data collected by our scraper and stored in MongoDB to enhance the relevance and precision of responses.
 
 ## Inspiration
 
-Generative AIs play an essential role in our daily lives, assisting in various fields of work. However, most generative AI models are trained on datasets that do not cover all the information available online. As a result, when users ask for information outside the AI's knowledge, it often responds with inaccurate or irrelevant content, frustrating users.
+Large language models play an essential role in our daily lives, assisting in various fields of work. However, most generative AI models are trained on datasets that do not cover all the information available online. As a result, when users ask for information outside the AI's knowledge, it often responds with inaccurate or irrelevant content, frustrating users.
 
 This project addresses this problem by providing a **Retrieval-Augmented Generation (RAG)** solution specifically for UofT students, helping them get accurate course suggestions. By integrating an LLM enhanced with a RAG pipeline, we ensure that course recommendations are based on the most up-to-date and relevant university-specific data.
-![Alt text](RAG_model.jpg)
 
 ## Introduction
 

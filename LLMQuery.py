@@ -1,8 +1,6 @@
 from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 import json
-from retriever import TextRetriever
-import json
 from transformers import LlamaTokenizer
 
 class LLMQuery:

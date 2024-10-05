@@ -50,6 +50,8 @@ def query():
         response = llm.query_with_retrieve(prompt)
         # response = llm.query(prompt)
         return jsonify({"response": response})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == '__main__':

@@ -33,7 +33,7 @@ class TextRetriever:
         print(related_doc_indices)
         retrieved_docs = [self.documents[i] for i in related_doc_indices]
         print("[TextRetriever] Retrieved top {} documents for the query.".format(self.top_k))
-        return retrieved_docs
+        return retrieved_docs, related_doc_indices
     
 #db = open('tester.txt', 'r')
 if __name__ == "__main__":

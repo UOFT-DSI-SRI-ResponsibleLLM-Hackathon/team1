@@ -159,14 +159,16 @@ if __name__ == "__main__":
     with open("./profiles.json", 'r') as agent_profiles_fp:
         agent_profiles = json.load(agent_profiles_fp)
     
+    # Test 3.1
     # llm_with_profile = LLMQuerywithProfile(groq_api_key, "First-Year Arts & Science Student", agent_profiles, model="llama-3.1-8b-instant", api_base=api_base)
     # user_query = "I am a new undergrad at UofT, can you help?"
     # _ = llm_with_profile.query(user_query)
     # llm_with_profile.save_chat("./sample_response_with_retriever_with_persona_first_year.json")
 
-    llm_with_profile = LLMQuerywithProfile(groq_api_key, "International Student from China in Commerce", agent_profiles, model="llama-3.1-8b-instant", api_base=api_base)
+    # Test 3.2
+    llm_with_profile = LLMQuerywithProfile(groq_api_key, "International Student from China in Commerce", agent_profiles, model="llama3-70b-8192", api_base=api_base)
     user_query = "Hi, I came from Shenzhen, how are you?"
     _ = llm_with_profile.query(user_query)
     user_query = "Where are you from? Do you recommend any courses for computer science undergrad like me?"
     _ = llm_with_profile.query(user_query)
-    llm_with_profile.save_chat("./sample_response_with_retriever_with_persona_china.json")
+    llm_with_profile.save_chat("./sample_response_with_retriever_with_persona_china_llama70b.json")

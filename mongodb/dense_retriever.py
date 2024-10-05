@@ -25,6 +25,7 @@ class DPRRetriever:
             self.device = device
         else:
             self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
         # Initialize DPR encoders and tokenizers with max_length
         self.ctx_tokenizer = DPRContextEncoderTokenizer.from_pretrained(
             'facebook/dpr-ctx_encoder-single-nq-base',
@@ -142,17 +143,17 @@ db = [
     "Athletes are particularly susceptible to dehydration and should monitor their fluid intake closely during training and competition."
 ]
 # Initialize the DPRRetriever
-retriever = DPRRetriever(documents=db, top_k=3)
+# retriever = DPRRetriever(documents=db, top_k=3)
 
-# User Query
-user_query = "What are athletes susceptible to?"
+# # User Query
+# user_query = "What are athletes susceptible to?"
 
-# Retrieve Top-K Documents
-embeddings = retriever.encode()
-retrieved_docs, chunk_indices = retriever.retrieve(user_query)
-print(chunk_indices.squeeze()) # this is the list of chunk indices that you will need to index into the db
+# # Retrieve Top-K Documents
+# embeddings = retriever.encode()
+# retrieved_docs, chunk_indices = retriever.retrieve(user_query)
+# print(chunk_indices.squeeze()) # this is the list of chunk indices that you will need to index into the db
 
-# Display Retrieved Documents
-print("\nRetrieved Documents:")
-for idx, doc in enumerate(retrieved_docs, 1):
-    print(f"{idx}. {doc}")
+# # Display Retrieved Documents
+# print("\nRetrieved Documents:")
+# for idx, doc in enumerate(retrieved_docs, 1):
+#     print(f"{idx}. {doc}")

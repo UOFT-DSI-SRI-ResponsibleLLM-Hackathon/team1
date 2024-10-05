@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ChatBox.css';
 import chat_bot_icon from "./../images/chat_bot_icon.jpg"
+import axios from 'axios';
 
 function ChatBox() {
   const [input, setInput] = useState('');
@@ -43,23 +44,35 @@ function ChatBox() {
     setChatHistory(prev => [...prev, { text: message, isBot: false }]);
   };
 
-  const getBotResponse = async (userMessage) => {  // 调用后端API，取得回复
-    // // Mock response instead of fetching from server
-    // const fakeResponse = "This is a mock response to your input: " + userMessage;
-    // // Simulate delay to mimic API response time
-    // setTimeout(() => {
-    //   setChatHistory(prev => [...prev, { text: fakeResponse, isBot: true }]);
-    // }, 500);
+  // const getBotResponse = async (userMessage) => {  // 调用后端API，取得回复
+  //   // // Mock response instead of fetching from server
+  //   // const fakeResponse = "This is a mock response to your input: " + userMessage;
+  //   // // Simulate delay to mimic API response time
+  //   // setTimeout(() => {
+  //   //   setChatHistory(prev => [...prev, { text: fakeResponse, isBot: true }]);
+  //   // }, 500);
 
-    try {
-      // 使用完整的后端 URL 地址来发送请求
-      const response = await fetch(`http://localhost:5000/get?msg=${encodeURIComponent(userMessage)}`);
-      const data = await response.text();
-      setChatHistory(prev => [...prev, { text: data, isBot: true }]);
-    } catch (error) {
-      console.error("Error fetching bot response:", error);
-    }
-  };
+  //   try {
+  //     // 使用完整的后端 URL 地址来发送请求
+  //     const response = await fetch(`http://localhost:5000/get`);
+  //     const data = await response.text();
+  //     setChatHistory(prev => [...prev, { text: data, isBot: true }]);
+  //   } catch (error) {
+  //     console.error("Error fetching bot response:", error);
+  //   }
+  // };
+
+  // Modify your getBotResponse function to use axios
+const getBotResponse = async (userMessage) => {
+  try {
+    const response = await axios.get(`http://localhost:5000/get`, {
+      params: { msg: userMessage }
+    });
+    setChatHistory(prev => [...prev, { text: response.data, isBot: true }]);
+  } catch (error) {
+    console.error("Error fetching bot response:", error);
+  }
+};
 
   const resetChat = () => {
     setChatHistory([{ text: "Hey, what can I help you today!", isBot: true }]);

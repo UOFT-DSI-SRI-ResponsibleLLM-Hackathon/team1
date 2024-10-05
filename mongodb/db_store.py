@@ -1,6 +1,6 @@
 from pymongo import MongoClient
-from splitter import TextSplitter
 import json
+from sentence_transformers import SentenceTransformer
 
 
 def insert_courses_into_db(courses_data):
@@ -14,16 +14,23 @@ def insert_courses_into_db(courses_data):
     # Connect to MongoDB
     client = MongoClient('mongodb://localhost:27017/')
     db = client['university_courses']
-    courses_collection = db['courses']
+    collection = db['courses']
 
-    # Prepare the data to insert (title, code, and description for each course)
-    if not courses_data:
-        raise ValueError("No course data to insert.")
-    
-    # Insert the data into MongoDB
-    courses_collection.insert_many(courses_data)
+    # Load a pre-trained Sentence-BERT model
+    model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
-    print(f"Inserted {len(courses_data)} course entries into MongoDB.")
+    # Iterate through each course, create an embedding, and store it in the database
+    for course in courses_data:
+        # Generate an embedding for the course description
+        embedding = model.encode(course['description']).tolist()  # Convert numpy array to list for MongoDB
+        
+        # Add embedding to the course dictionary
+        course['embedding'] = embedding
+        
+        # Insert the course data (including the embedding) into MongoDB
+        collection.insert_one(course)
+
+    print("Inserted courses with embeddings into MongoDB.")
 
 
 if __name__ == '__main__':

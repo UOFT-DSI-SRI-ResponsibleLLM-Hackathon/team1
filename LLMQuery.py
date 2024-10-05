@@ -2,6 +2,7 @@ from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 import json
 from transformers import LlamaTokenizer
+from mongodb.data_retriever import retrieve_courses_from_db
 
 class LLMQuery:
     def __init__(self, api_key, model="llama-3.1-8b-instant", max_tokens=10000, api_base=None):
@@ -65,6 +66,16 @@ class LLMQuery:
         print(f"[LLMQuery] Token counts - Prompt: {prompt_tokens}, Response: {response_tokens}, Total: {total_tokens}")
         print(f"==========================")
         return answer
+    
+    def query_with_retrieve(self, user_prompt):
+        #retrieved_docs = self.TextRetriever.retrieve(user_prompt)
+        retrieved_docs = retrieve_courses_from_db(user_prompt)
+
+        augmented_prompt = user_prompt + "\n\nThe following retrieved content may be used to aid your response: " + "\n" + "\n".join(retrieved_docs)
+
+        answer = self.query(augmented_prompt)
+
+        return answer
         
     
     def save_chat(self, file_path):
@@ -111,14 +122,7 @@ class LLMQuery_with_TextRetriever:
         self.TextRetriever = TextRetriever
         print("[LLMQuery_with_TextRetriever] Initialized with model {}.".format(self.LLMQuery.model))
 
-    def query_with_retrieve(self, user_prompt):
-        retrieved_docs = self.TextRetriever.retrieve(user_prompt)
-
-        augmented_prompt = user_prompt + "\n\nThe following retrieved content may be used to aid your response: " + "\n" + "\n".join(retrieved_docs)
-
-        answer = self.LLMQuery.query(augmented_prompt)
-
-        return answer
+    
 
 
 
@@ -127,6 +131,7 @@ class LLMQuery_with_TextRetriever:
 if __name__ == "__main__":
     groq_api_key = "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"
     api_base = "https://api.groq.com/openai/v1"
+    openai_api_key = "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"
 
     # llm = LLMQuery(groq_api_key, model="llama-3.1-8b-instant", api_base=api_base)
 
@@ -164,9 +169,10 @@ if __name__ == "__main__":
     # llm_with_profile.save_chat("./sample_response_with_retriever_with_persona_first_year.json")
 
     # Test 3.2
-    llm_with_profile = LLMQuerywithProfile(groq_api_key, "International Student from China in Commerce", agent_profiles, model="llama3-70b-8192", api_base=api_base)
+    # llm_with_profile = LLMQuerywithProfile(groq_api_key, "International Student from China in Commerce", agent_profiles, model="llama3-70b-8192", api_base=api_base)
+    llm_with_profile = LLMQuerywithProfile(openai_api_key, "International Student from China in Commerce", agent_profiles, model="gpt-4o")
     user_query = "Hi, I came from Shenzhen, how are you?"
     _ = llm_with_profile.query(user_query)
     user_query = "Where are you from? Do you recommend any courses for computer science undergrad like me?"
     _ = llm_with_profile.query(user_query)
-    llm_with_profile.save_chat("./sample_response_with_retriever_with_persona_china_llama70b.json")
+    llm_with_profile.save_chat("./sample_response_with_retriever_with_persona_china_gpt-4o.json")

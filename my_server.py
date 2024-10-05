@@ -49,7 +49,8 @@ def query():
             llm = LLMQuery(openai_api_key, model="gpt-4o")
 
         # Query LLM
-        response = llm.query_with_retrieve(prompt)
+        # response = llm.query_with_retrieve(prompt)
+        response = llm.query(prompt)
         return jsonify({"response": response})
     
     except ValueError as e:

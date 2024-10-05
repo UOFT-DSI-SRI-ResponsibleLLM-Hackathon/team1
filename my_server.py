@@ -49,7 +49,8 @@ def query():
             llm = LLMQuery(openai_api_key, model="gpt-4o")
 
         # Query the LLM
-        response = llm.query(prompt)
+        # response = llm.query(prompt)
+        response = llm.query_with_retrieve(prompt)
 
         # Clear the LLM from memory after use
         del llm

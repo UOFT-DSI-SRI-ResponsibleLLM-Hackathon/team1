@@ -13,13 +13,12 @@ with open("./profiles.json", 'r') as agent_profiles_fp:
 
 use_groq = False
 
-if use_groq:
-    groq_api_key = "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"
-    api_base = "https://api.groq.com/openai/v1"
-    llm = LLMQuery(groq_api_key, model="llama3-70b-8192", api_base=api_base)
-else:
-    openai_api_key = "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"
-    llm = LLMQuery(openai_api_key, model="gpt-4o")
+
+# Root route to test if the API is running
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({"message": "API is running!"}), 200
+
 
 @app.route('/query', methods=['POST'])
 def query():
@@ -30,6 +29,13 @@ def query():
             return jsonify({"error": "No prompt provided"}), 400
 
         # Call the LLMQuery's query method
+        if use_groq:
+            groq_api_key = "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"
+            api_base = "https://api.groq.com/openai/v1"
+            llm = LLMQuery(groq_api_key, model="llama3-70b-8192", api_base=api_base)
+        else:
+            openai_api_key = "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"
+            llm = LLMQuery(openai_api_key, model="gpt-4o")
         response = llm.query_with_retrieve(prompt)
         return jsonify({"response": response})
     except Exception as e:

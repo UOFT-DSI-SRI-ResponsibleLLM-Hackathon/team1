@@ -29,22 +29,40 @@ def home():
 @app.route('/query', methods=['POST'])
 def query():
     try:
+        if not request.is_json:
+            return jsonify({"error": "Content-Type must be application/json"}), 415
+
         data = request.get_json()
         prompt = data.get("message", "")
         if not prompt:
             return jsonify({"error": "No prompt provided"}), 400
 
-        # Call the LLMQuery's query method
+        # Initialize LLMQuery
         if use_groq:
             api_base = "https://api.groq.com/openai/v1"
+            if not groq_api_key:
+                return jsonify({"error": "GROQ API key not found"}), 500
             llm = LLMQuery(groq_api_key, model="llama3-70b-8192", api_base=api_base)
         else:
+            if not openai_api_key:
+                return jsonify({"error": "OpenAI API key not found"}), 500
             llm = LLMQuery(openai_api_key, model="gpt-4o")
 
+        # Query LLM
         response = llm.query_with_retrieve(prompt)
         return jsonify({"response": response})
+    
+    except ValueError as e:
+        return jsonify({"error": "Invalid data: " + str(e)}), 400
+    except KeyError as e:
+        return jsonify({"error": f"Missing configuration: {str(e)}"}), 500
+    except ConnectionError:
+        return jsonify({"error": "Network error. Please try again later."}), 502
+    except TimeoutError:
+        return jsonify({"error": "Request timed out"}), 504
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": "Internal Server Error: " + str(e)}), 500
+
 
 
 @app.route('/llm-query/no-rag', methods=['POST'])
@@ -69,5 +87,6 @@ def query_without_RAG():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    # port = int(os.environ.get('PORT', 5000))
+    # app.run(host='0.0.0.0', port=port)
+    app.run()

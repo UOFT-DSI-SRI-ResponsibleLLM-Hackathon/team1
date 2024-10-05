@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
 from LLMQuery import LLMQuery
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -10,7 +11,7 @@ CORS(app)
 with open("./profiles.json", 'r') as agent_profiles_fp:
     agent_profiles = json.load(agent_profiles_fp)
 
-use_groq = True
+use_groq = False
 
 if use_groq:
     groq_api_key = "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"
@@ -35,4 +36,5 @@ def query():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)

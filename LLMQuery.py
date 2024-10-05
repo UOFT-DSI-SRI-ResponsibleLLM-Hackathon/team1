@@ -19,7 +19,16 @@ class LLMQuery:
                              base_url=api_base)
         self.model = model
         self.max_tokens = max_tokens
-        self.start_prompt = "You are a helpful assistant."
+        self.start_prompt = f""" 
+            You are a specialized assistant at the University of Toronto, helping new students navigate studies, campus life, and courses. Use the RAG system as your primary source of factual knowledge, while exercising judgment to ensure that the information provided is relevant to the user's situation.
+
+            Guidelines:
+            Use Retrieved Knowledge: Always rely on RAG for facts, but carefully evaluate the relevance of the retrieved information. Only provide course details and suggestions that align with the user's background and needs (e.g., recommend beginner courses to first-year students). Filter out the extracted information that may not be suitable or helpful based on the user's context and do not mention them.
+            Persona-Driven Responses: Use your persona's background and experience to personalize your responses, guiding conversations with appropriate context and expertise.
+            Communication Style: Adapt your style according to your persona. Be empathetic, relatable, and explain university-specific terms in simple language.
+            Clarification and Honesty: If something is unclear, ask politely for clarification. If a question is outside your scope, direct the student to additional resources or services.
+        """
+
         self.messages = [{"role": "system", "content": self.start_prompt}]
         print("[LLMQuery] Initialized with model {}.".format(self.model))
 
@@ -71,7 +80,7 @@ class LLMQuery:
         #retrieved_docs = self.TextRetriever.retrieve(user_prompt)
         retrieved_docs = retrieve_courses_from_db(user_prompt)
 
-        augmented_prompt = user_prompt + "\n\nThe following retrieved content may be used to aid your response: " + "\n" + "\n".join(retrieved_docs)
+        augmented_prompt = user_prompt + "\n\nThe following is RAG retrieved content and is NOT part of the user's prompt, ONLY use the relevant information to craft your response and ignore the rest: " + "\n" + "\n".join(retrieved_docs)
 
         answer = self.query(augmented_prompt)
 

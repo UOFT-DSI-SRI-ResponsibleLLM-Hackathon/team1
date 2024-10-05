@@ -15,7 +15,7 @@ use_groq = True
 if use_groq:
     groq_api_key = "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"
     api_base = "https://api.groq.com/openai/v1"
-    llm = LLMQuery(groq_api_key, model="llama-3.1-8b-instant", api_base=api_base)
+    llm = LLMQuery(groq_api_key, model="llama3-70b-8192", api_base=api_base)
 else:
     openai_api_key = "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"
     llm = LLMQuery(openai_api_key, model="gpt-4o")

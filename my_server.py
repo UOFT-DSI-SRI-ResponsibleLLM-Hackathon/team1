@@ -41,7 +41,7 @@ def query():
         else:
             llm = LLMQuery(openai_api_key, model="gpt-4o")
 
-        response = llm.query(prompt)
+        response = llm.query_with_retrieve(prompt, data)
         return jsonify({"response": response})
     except Exception as e:
         return jsonify({"error": str(e)}), 500

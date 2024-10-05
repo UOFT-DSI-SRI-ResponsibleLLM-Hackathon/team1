@@ -11,7 +11,7 @@ def retrieve_courses_from_db(query):
         query (str): The user query used to search for similar courses.
     """
     # Connect to MongoDB
-    client = MongoClient('mongodb://localhost:27017/')
+    client = MongoClient('mongodb+srv://alanzhao0921:3ISKpgnMg0lxbVGC@hackathon.ve2hz.mongodb.net/?retryWrites=true&w=majority')
     db = client['university_courses']
     collection = db['courses']
 
@@ -49,12 +49,10 @@ def retrieve_courses_from_db(query):
     D, I = index.search(query_embedding, 5)  # Retrieve top 5 most similar courses
 
     # Print the most similar courses, including course code, title, and description
+    retrieved_text = []
     for i in I[0]:
-        print(f"Course Code: {docs[i]['code']}")
-        print(f"Title: {docs[i]['title']}")
-        print(f"Description: {docs[i]['description']}")
-        print()
-
+        retrieved_text.append(docs[i]['code']+docs[i]['title'] + docs[i]['description'])
+    return retrieved_text
 
 if __name__ == '__main__':
     # User query

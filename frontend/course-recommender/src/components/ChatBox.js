@@ -50,7 +50,7 @@ function ChatBox() {
       // Add "thinking" indicator to chat history
       setChatHistory(prev => [...prev, { text: 'I am thinking ...', isBot: true }]);
 
-      const response = await fetch('http://localhost:5000/query', {
+      const response = await fetch('https://team1-backend.onrender.com/query', {
         method: 'POST',  // Specify the POST method
         headers: {
           'Content-Type': 'application/json',  // Indicate the content type

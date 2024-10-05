@@ -53,7 +53,7 @@ function ChatBox() {
 
     try {
       // 使用完整的后端 URL 地址来发送请求
-      const response = await fetch(`http://localhost:5000/get?msg=${encodeURIComponent(userMessage)}`);
+      const response = await fetch(`http://localhost:5000`);
       const data = await response.text();
       setChatHistory(prev => [...prev, { text: data, isBot: true }]);
     } catch (error) {

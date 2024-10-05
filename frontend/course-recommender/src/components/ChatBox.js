@@ -3,6 +3,8 @@ import './ChatBox.css';
 import chat_bot_icon from "./../images/chat_bot_icon.jpg"
 
 function ChatBox() {
+
+  const fake_response = "The server is not connected ~~"
   const [input, setInput] = useState('');
   const [chatHistory, setChatHistory] = useState([
     { text: "Hey, what can I help you today!", isBot: true },
@@ -58,11 +60,17 @@ function ChatBox() {
       }
       
       const data = await response.json();  // Get the response text
-      const botMessage = data.response;  // Extract the response string
+      let botMessage = data.response;  // Extract the response string
+      botMessage = botMessage.replace(/\n/g, "<br />");
+      botMessage = botMessage.replace(/(?<!\\)\*\*(.+?)\*\*/g, "<b>$1</b>");
 
       setChatHistory(prev => [...prev, { text: botMessage, isBot: true }]);
     } catch (error) {
       console.error("Error fetching bot response:", error);
+      let botMessage = fake_response;  // Extract the response string
+      botMessage = botMessage.replace(/\n/g, "<br />");
+      botMessage = botMessage.replace(/(?<!\\)\*\*(.+?)\*\*/g, "<b>$1</b>");
+      setChatHistory(prev => [...prev, { text: botMessage, isBot: true }]);
     }
   };
 
@@ -85,10 +93,14 @@ function ChatBox() {
       {/* Chatbox container holds both history and input fields */}
       <div className="chatbox" ref={historyRef}>
         {/* Chat history container */}
-        <div className="historyChat" >
+        <div className="historyChat">
           {chatHistory.map((message, index) => (
             <div key={index} className={`text ${message.isBot ? 'botText' : 'userText'}`}>
-              <p>{message.text}</p>
+              {message.isBot ? (
+                <p dangerouslySetInnerHTML={{ __html: message.text }}></p>
+              ) : (
+                <p>{message.text}</p>
+              )}
             </div>
           ))}
         </div>

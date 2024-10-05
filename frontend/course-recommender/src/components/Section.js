@@ -21,9 +21,36 @@ const Section = () => {
         <div className="flex-title">Explore These Courses</div>
           <div className="flex-desc">The following courses might be helpful for your future study</div>
           <div className="cards">
-            {[...Array(6)].map((_, i) => (
-              <Card key={i} title={`Title ${i + 1}`} subtitle={`Subtitle ${i + 1}`} />
-            ))}
+            <Card 
+              title="CSC108"
+              subtitle={`Introduction to Computer Programming`}
+              link="https://artsci.calendar.utoronto.ca/course/csc108h1"
+            />
+            <Card 
+              title="CSC148"
+              subtitle={`Introduction to Computer Science`} 
+              link="https://artsci.calendar.utoronto.ca/course/csc148h1"
+            />
+            <Card 
+              title="CSC165"
+              subtitle={`Math Expr. and Reasoning for CS`} 
+              link="https://artsci.calendar.utoronto.ca/course/csc165h1"
+            />
+            <Card 
+              title="CSC110"
+              subtitle="Foundations of Computer Science I"
+              link="https://artsci.calendar.utoronto.ca/course/csc110y1"
+            />
+            <Card 
+              title="MAT137"
+              subtitle={`Calculus with Proofs`} 
+              link="https://artsci.calendar.utoronto.ca/course/mat137y1"
+            />
+            <Card 
+              title="STA130"
+              subtitle={`Introduction to Statistical`} 
+              link="https://artsci.calendar.utoronto.ca/course/sta130h1"
+            />
           </div>
         </div>
       </section>

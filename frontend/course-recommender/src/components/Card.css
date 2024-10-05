@@ -50,4 +50,9 @@
     filter: blur(100px);
   }
   
+  .card-link {
+    text-decoration: none; /* Remove the default underline */
+    color: inherit; /* Keep the original text color */
+    display: inline-block; /* Make the anchor act as a block for the entire card */
+  }
   

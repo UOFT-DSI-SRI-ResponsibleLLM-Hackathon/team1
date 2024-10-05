@@ -286,16 +286,23 @@
   .pc-enterprise{
     background-color:#d66a96;
   }
-  .footer-under{
-    background-color:#312833;
-    padding-bottom:100px;
-    padding-top:100px;
-    min-height:500px;
-    color:#eee;
-    position:relative;
-    font-weight:100;
-    font-family:Helvetica,serif;
-  }
+  .footer-under {
+    background-color: #312833;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    min-height: 10px;
+    color: #eee;
+    position: relative;
+    font-weight: 100;
+    font-family: Helvetica, serif;
+    
+    /* New Flexbox properties */
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally */
+    justify-content: center; /* Center children vertically if needed */
+    text-align: center; /* Center text */
+}
   .copyright{
     background-color:rgba(0, 0, 0, 0.15);
     color:rgba(238, 238, 238, 0.5);

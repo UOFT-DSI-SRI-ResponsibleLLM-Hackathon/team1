@@ -12,6 +12,7 @@ class TextSplitter:
             self.raw_data = raw_data
         self.processed_data = None
         self.chunks = None
+        self.descriptions = None
 
     def chunk_split(self, text):
         splitter = RecursiveCharacterTextSplitter(chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap)
@@ -45,6 +46,16 @@ class TextSplitter:
     def save_json(self, file_name):
         with open(file_name, 'w') as file:
             json.dump(self.processed_data, file)
+
+    def get_descriptions(self):
+        descriptions = []
+        for entry in self.raw_data:
+            title = entry["title"]
+            code = entry["code"]
+            description = entry['description']
+            combined_info = code + title + description
+            descriptions.append(combined_info[:512])
+        self.descriptions = descriptions
 
 
 if __name__ == '__main__':

@@ -242,21 +242,21 @@ def get_description_by_index(indices):
 if __name__ == "__main__":
     splitter = TextSplitter()
     splitter.load_json("/h/290/elizabeth/paul/team1/mongodb/courses.json")
-    splitter.process_json()
+    splitter.get_descriptions()
     
-    course_chunks = splitter.chunks
-    #retriever = DPRRetriever(course_chunks)
-    retriever = TextRetriever(course_chunks)
+    # course_chunks = splitter.chunks
+    retriever = DPRRetriever(splitter.descriptions)
+    # retriever = TextRetriever(splitter.descriptions)
 
     groq_api_key = "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"
     api_base = "https://api.groq.com/openai/v1"
     llm = LLMQuery(groq_api_key, model="llama-3.1-8b-instant", api_base=api_base)
 
     llm_with_retriever = LLMQuery_with_TextRetriever(llm, retriever)
-    user_query = "I am a first year CS student, what are some courses you recommend?"
-    retrieved_indices = llm_with_retriever.get_indices(user_query)
-    descriptions = get_description_by_index(retrieved_indices)
-    print(descriptions)
+    user_query = "I am a ECE student, are there any ECE courses you recommend?"
+    # retrieved_indices = llm_with_retriever.get_indices(user_query)
+    # descriptions = get_description_by_index(retrieved_indices)
+    # print(descriptions)
 
-    # response = llm_with_retriever.query_with_retrieve(user_query)
-    # print(response)
+    response = llm_with_retriever.query_with_retrieve(user_query)
+    print(response)

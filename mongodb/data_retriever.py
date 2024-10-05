@@ -46,7 +46,7 @@ def retrieve_courses_from_db(query):
     query_embedding = model.encode(query).reshape(1, -1)
 
     # Perform vector search
-    D, I = index.search(query_embedding, 5)  # Retrieve top 5 most similar courses
+    D, I = index.search(query_embedding, 10)  # Retrieve top k most similar courses
 
     # Print the most similar courses, including course code, title, and description
     retrieved_text = []

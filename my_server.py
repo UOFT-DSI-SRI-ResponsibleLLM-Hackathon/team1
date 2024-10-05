@@ -15,7 +15,7 @@ CORS(app)
 openai_api_key = os.getenv("OPENAI_API_KEY")
 groq_api_key = os.getenv("GROQ_API_KEY")
 
-use_groq = False  # You can change this based on your model preference
+use_groq = True
 
 
 # Root route to test if the API is running

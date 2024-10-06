@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from models import Course
 
 def update_courses_in_db():
-    client = MongoClient('mongodb+srv://alanzhao0921:3ISKpgnMg0lxbVGC@hackathon.ve2hz.mongodb.net/')
+    client = MongoClient('mongodb://localhost:27017/')
     db = client['university_courses']
     courses_collection = db['courses']
 

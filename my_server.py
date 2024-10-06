@@ -12,7 +12,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Initialize API keys
-openai_api_key = os.getenv("OPENAI_API_KEY")
+# openai_api_key = os.getenv("OPENAI_API_KEY")
 groq_api_key = os.getenv("GROQ_API_KEY")
 
 use_groq = True
@@ -41,18 +41,14 @@ def query():
             if not groq_api_key:
                 return jsonify({"error": "GROQ API key not found"}), 500
             llm = LLMQuery(groq_api_key, model="llama3-70b-8192", api_base=api_base)
-        else:
-            if not openai_api_key:
-                return jsonify({"error": "OpenAI API key not found"}), 500
-            llm = LLMQuery(openai_api_key, model="gpt-4o")
+        # else:
+        #     if not openai_api_key:
+        #         return jsonify({"error": "OpenAI API key not found"}), 500
+        #     llm = LLMQuery(openai_api_key, model="gpt-4o")
 
         # Query LLM
         response = llm.query_with_retrieve(prompt)
         # response = llm.query(prompt)
-
-        # Clear the LLM from memory after use
-        del llm
-        gc.collect()  # Force garbage collection to free up memory
         
         return jsonify({"response": response})
     except Exception as e:
@@ -60,6 +56,6 @@ def query():
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
 

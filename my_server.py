@@ -49,6 +49,11 @@ def query():
         # Query LLM
         response = llm.query_with_retrieve(prompt)
         # response = llm.query(prompt)
+
+        # Clear the LLM from memory after use
+        del llm
+        gc.collect()  # Force garbage collection to free up memory
+        
         return jsonify({"response": response})
     except Exception as e:
         return jsonify({"error": str(e)}), 500

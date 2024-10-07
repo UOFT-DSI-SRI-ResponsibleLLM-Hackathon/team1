@@ -12,7 +12,7 @@ def insert_courses_into_db(courses_data):
         courses_data (list of dict): A list where each entry is a dictionary containing the course information.
     """
     # Connect to MongoDB
-    client = MongoClient('mongodb+srv://alanzhao0921:3ISKpgnMg0lxbVGC@hackathon.ve2hz.mongodb.net/')
+    client = MongoClient('mongodb+srv://alanzhao0921:cjDk7MpE7n8EcRXm@hackathon.ve2hz.mongodb.net/')
     db = client['university_courses']
     collection = db['courses']
 

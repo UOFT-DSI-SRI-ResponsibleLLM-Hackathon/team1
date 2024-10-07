@@ -11,7 +11,7 @@ def retrieve_courses_from_db(query):
         query (str): The user query used to search for similar courses.
     """
     # Connect to MongoDB
-    client = MongoClient('mongodb+srv://alanzhao0921:3ISKpgnMg0lxbVGC@hackathon.ve2hz.mongodb.net/?retryWrites=true&w=majority')
+    client = MongoClient('mongodb+srv://alanzhao0921:cjDk7MpE7n8EcRXm@hackathon.ve2hz.mongodb.net/?retryWrites=true&w=majority')
     db = client['university_courses']
     collection = db['courses']
 

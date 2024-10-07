@@ -1,91 +1,151 @@
-import requests
-from bs4 import BeautifulSoup
-import json
+import faiss
+import numpy as np
+from pymongo import MongoClient
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+MONGO_URI = os.getenv('MONGO_URI')
+client = MongoClient(MONGO_URI)
+
+def get_year_embedding(model):
+    """
+    Generate embeddings for each year level (first, second, third, fourth).
+    
+    Args:
+        model: Pre-trained SentenceTransformer model.
+
+    Returns:
+        dict: A dictionary mapping year levels to their corresponding embeddings.
+    """
+    year_descriptions = {
+        1: "first year courses",
+        2: "second year courses",
+        3: "third year courses",
+        4: "fourth year courses"
+    }
+
+    year_embeddings = {year: model.encode(desc) for year, desc in year_descriptions.items()}
+    return year_embeddings
 
 
+def retrieve_courses_from_db(query, num_results=10):
+    """
+    Retrieve courses from the MongoDB database based on a user query and suggest related courses.
+    
+    Args:
+        query (str): The user query used to search for similar courses.
+        num_results (int): Number of courses to retrieve.
+    
+    Returns:
+        list: A list of strings with details of the retrieved courses.
+    """
+    # Connect to MongoDB
+    db = client['university_courses']
+    collection = db['courses']
 
-# {
-#     "title": "Introduction to Computer Science",
-#     "code": "CSC108H1",
-#     "year": 1,  // Derived from the course code
-#     "description": "A basic introduction to programming and computer science...",
-#     "embedding": [0.1, 0.2, ...],  // Embedding from SentenceTransformer
-#     "related_courses": ["CSC148H1", "CSC165H1"],  // Optional: manually link related courses or based on NLP similarity
-#     "prerequisites": ["None"]  // Prerequisite courses, scraped or derived
-# }
+    # Load pre-trained Sentence-BERT model
+    model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
+    # Get year embeddings
+    year_embeddings = get_year_embedding(model)
 
-def extract_year_from_code(course_code):
-    """Extracts the year of the course based on the fourth character of the course code."""
-    try:
-        year_char = course_code[3]
-        if year_char.isdigit():
-            return int(year_char)
-    except IndexError:
-        pass
-    return None  # Return None if year cannot be determined
+    # Encode the user's query
+    query_embedding = model.encode(query).reshape(1, -1)  # Ensure it's 2D
 
+    # Find the most similar year using cosine similarity
+    closest_year = None
+    highest_similarity = -1
 
-def scrape_course_data():
-    courses = []
-    page = 0
-    while True:
-        url = f'https://artsci.calendar.utoronto.ca/search-courses?course_keyword=&field_section_value=Computer+Science&field_prerequisite_value=&field_breadth_requirements_value=All&page={page}'
-        print(f'Scraping page {page}')
-        response = requests.get(url)
-        if response.status_code != 200:
-            print(f'Failed to retrieve page {page}. Status code: {response.status_code}')
-            break
+    for year, year_embedding in year_embeddings.items():
+        year_embedding = np.array(year_embedding).reshape(1, -1)  # Ensure it's 2D
+        similarity = cosine_similarity(query_embedding, year_embedding)[0][0]
+        if similarity > highest_similarity:
+            highest_similarity = similarity
+            closest_year = year
 
-        soup = BeautifulSoup(response.content, 'html.parser')
-        course_rows = soup.find_all('div', class_='views-row')
-        if not course_rows:
-            print(f'No courses found on page {page}. Ending pagination.')
-            break
+    print(f"Closest year: {closest_year} (Similarity: {highest_similarity})")
 
-        for course_row in course_rows:
-            try:
-                course_header = course_row.find('h3', class_='js-views-accordion-group-header')
-                if not course_header:
-                    continue
+    # If no close match is found, return an empty result
+    if closest_year is None:
+        return []
 
-                title_div = course_header.find('div', attrs={'aria-label': True})
-                if not title_div:
-                    continue
-                course_code_title = title_div.get('aria-label').strip()
-                if ' - ' in course_code_title:
-                    code, title = course_code_title.split(' - ', 1)
-                else:
-                    code, title = course_code_title, ''
+    # Retrieve course documents filtered by the closest year
+    mongo_query = {"year": closest_year}
+    docs = list(collection.find(mongo_query, {"description_embedding": 1, "description_chunks": 1, "title": 1, "course_id": 1, "related_courses": 1}))
 
-                # Extract year from course code
-                year = extract_year_from_code(code)
+    if not docs:
+        print(f"No courses found for the closest year: {closest_year}")
+        return []
 
-                # Get the course description
-                content_div = course_row.find('div', class_='field-content')
-                course_details = content_div.get_text(separator=' ', strip=True) if content_div else ''
+    # Prepare embeddings and course references for FAISS search
+    all_embeddings = []
+    all_courses = []
+    all_chunk_refs = []
 
-                course = {
-                    'title': title,
-                    'code': code,
-                    'description': course_details,
-                    'year': year,  # Add the year field
-                    'related_courses': [],  # You can add related courses in later processing
-                }
+    # Add full description embeddings first
+    for doc in docs:
+        all_embeddings.append(doc['description_embedding'])  # Full description embedding
+        all_courses.append(doc)
+        all_chunk_refs.append(-1)  # -1 to indicate full description
 
-                courses.append(course)
+    # Add chunk embeddings
+    for doc in docs:
+        for chunk_idx, chunk in enumerate(doc['description_chunks']):
+            all_embeddings.append(chunk['embedding'])
+            all_courses.append(doc)
+            all_chunk_refs.append(chunk_idx)
 
-            except Exception as e:
-                print(f"Error parsing course {course_code_title}: {e}")
-                continue
+    all_embeddings = np.array(all_embeddings)
 
-        page += 1
+    if all_embeddings.size == 0:
+        print(f"No embeddings found for the closest year: {closest_year}")
+        return []
 
-    return courses
+    # Initialize FAISS index for vector search
+    index = faiss.IndexFlatL2(all_embeddings.shape[1])
+    index.add(all_embeddings)
+
+    # Perform vector search for the top 'num_results' similar chunks
+    D, I = index.search(query_embedding, num_results)
+
+    # Retrieve the most similar courses
+    retrieved_courses = []
+    course_ids_seen = set()
+
+    for i in I[0]:
+        course = all_courses[i]
+        chunk_index = all_chunk_refs[i]
+
+        # Avoid duplicate courses in results
+        if course['course_id'] in course_ids_seen:
+            continue
+
+        # If chunk_index is -1, it's a full description match
+        if chunk_index == -1:
+            description_text = course['description_chunks'][0]['text']  # Use first chunk text for display
+        else:
+            description_text = course['description_chunks'][chunk_index]['text']
+
+        # Create a string representation of the course
+        course_string = f"Code: {course['course_id']}, Title: {course['title']}, Description: {description_text}, Related Courses: {', '.join(course.get('related_courses', []))}"
+        
+        retrieved_courses.append(course_string)
+        course_ids_seen.add(course['course_id'])
+
+    return retrieved_courses
+
 
 if __name__ == '__main__':
-    courses = scrape_course_data()
-    print(f"Scraped {len(courses)} courses.")
-    file_name = 'cs_courses.json'
-    with open(file_name, 'w') as file:
-        json.dump(courses, file, indent=2)
+    # User query with implicit year information
+    query = "I'm interested in second year computer science courses."
+
+    # Retrieve similar courses, with year inferred from the query
+    results = retrieve_courses_from_db(query)
+    
+    # Print the list of formatted strings
+    for result in results:
+        print(result)

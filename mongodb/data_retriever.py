@@ -119,11 +119,11 @@ def retrieve_courses_from_db(query, num_results=10):
 
         # Create a string representation of the course
         course_string = f"Code: {course['course_id']}, Title: {course['title']}, Description: {course['description_chunks'][chunk_index]['text']}, Related Courses: {', '.join(course.get('related_courses', []))}"
-        
+        print(course_string)
         retrieved_courses.append(course_string)
         course_ids_seen.add(course['course_id'])
 
-    return retrieved_courses
+    return retrieved_courses[:5]
 
 
 if __name__ == '__main__':
